@@ -18,5 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// memo
 Route::get('/memos', [ App\Http\Controllers\MemoController::class, 'showMemos']);
 Route::get('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'getMemosById']);
+Route::patch('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'updateMemosById']);
