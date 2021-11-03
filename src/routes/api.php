@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/memos', [ App\Http\Controllers\MemoController::class, 'showMemos']);
+Route::get('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'getMemosById']);
