@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // memo
-Route::get('/memos', [ App\Http\Controllers\MemoController::class, 'showMemos']);
-Route::get('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'getMemosById']);
-Route::patch('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'updateMemosById']);
+Route::get('/memos', [ App\Http\Controllers\MemoController::class, 'showMemos'])->name('memo.all');
+Route::get('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'getMemosById'])->name('memo.get');;
+Route::patch('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'updateMemosById'])->name('memo.update');
+Route::delete('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'deleteMemosById'])->name('memo.delete');
