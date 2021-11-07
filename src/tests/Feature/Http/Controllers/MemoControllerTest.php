@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,10 +16,20 @@ class MemoControllerTest extends TestCase
     use RefreshDatabase;
     use WithoutMiddleware;
 
+    /**
+     * @param $count
+     * @return Collection<Memo>
+     */
+    private function createMemos($count): Collection {
+        return Memo::factory(Memo::class)
+            ->for(User::factory()->create(), 'author')
+            ->count($count)->create();
+    }
+
     /** @test */
     public function memo一覧が取得できる()
     {
-        $memos = Memo::factory(Memo::class)->count(3)->create();
+        $memos = $this->createMemos(3);
         $response = $this->getJson(route('memo.all'));
         $response
             ->assertStatus(200)
@@ -41,8 +53,7 @@ class MemoControllerTest extends TestCase
     /** @test */
     public function memoがid指定で取得できる()
     {
-        $memos = Memo::factory(Memo::class)->count(3)->create();
-
+        $memos = $this->createMemos(3);
         $response = $this->getJson(route('memo.get', [
             'id' => $memos[0]->id,
         ]));
@@ -56,7 +67,7 @@ class MemoControllerTest extends TestCase
     /** @test */
     public function memo取得時にidが存在しない場合()
     {
-        $memos = Memo::factory(Memo::class)->count(3)->create();
+        $memos = $this->createMemos(3);
         $count = Memo::all()->count();
 
         $response = $this->getJson(route('memo.get', [
@@ -76,7 +87,7 @@ class MemoControllerTest extends TestCase
         ];
 
         $count = 3;
-        $memos = Memo::factory(Memo::class)->count($count)->create();
+        $memos = $this->createMemos($count);
 
         // update
         $response = $this->patchJson(
@@ -106,7 +117,7 @@ class MemoControllerTest extends TestCase
     public function memoがid指定でDeleteできる()
     {
         $count = 3;
-        $memos = Memo::factory(Memo::class)->count($count)->create();
+        $memos = $this->createMemos($count);
 
         // delete
         $response = $this->deleteJson(
