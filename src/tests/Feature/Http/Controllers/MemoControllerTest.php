@@ -84,6 +84,15 @@ class MemoControllerTest extends TestCase
     }
 
     /** @test */
+    public function memoのid指定_非認証()
+    {
+        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3);
+        $response = $this->getJson("/api/memos/{$memos[0]->id}");
+        $response
+            ->assertStatus(401);
+    }
+
+    /** @test */
     public function memoがid指定で更新できる()
     {
         $post_data = [
