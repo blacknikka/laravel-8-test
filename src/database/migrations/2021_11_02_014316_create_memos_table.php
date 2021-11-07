@@ -14,10 +14,15 @@ class CreateMemosTable extends Migration
     public function up()
     {
         Schema::create('memos', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('title', 255);
             $table->text('body');
             $table->string('status');
+
+            // user ID
+            $table->integer('author_id')->unsigned()->default(0);
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
