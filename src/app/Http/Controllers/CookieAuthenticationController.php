@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CookieAuthenticationController extends Controller
 {
+    public const ERR_LOGIN_SUCCEEDED = 'ログインしました';
+    public const ERR_LOGIN_FILED = 'ログインに失敗しました。再度お試しください';
+    public const ERR_LOGOUT_SUCCEEDED = 'ログアウトしました';
+
     /**
      * 認証の試行を処理
      *
@@ -24,10 +28,10 @@ class CookieAuthenticationController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return new JsonResponse(['message' => 'ログインしました']);
+            return new JsonResponse(['message' => self::ERR_LOGIN_SUCCEEDED]);
         }
 
-        throw new Exception('ログインに失敗しました。再度お試しください');
+        return new JsonResponse(['message' => self::ERR_LOGIN_FILED], 401);
     }
 
     /**
@@ -40,6 +44,6 @@ class CookieAuthenticationController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return new JsonResponse(['message' => 'ログアウトしました']);
+        return new JsonResponse(['message' => self::ERR_LOGOUT_SUCCEEDED]);
     }
 }

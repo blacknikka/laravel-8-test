@@ -25,5 +25,5 @@ Route::patch('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'updat
 Route::delete('/memos/{id}', [ App\Http\Controllers\MemoController::class, 'deleteMemosById'])->name('memo.delete');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/me', App\Http\Controllers\MeController::class);
+    Route::get('/me', App\Http\Controllers\MeController::class)->name('user.me');
 });
