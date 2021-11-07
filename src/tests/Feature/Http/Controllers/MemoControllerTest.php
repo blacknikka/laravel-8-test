@@ -5,12 +5,14 @@ namespace Tests\Feature\Http\Controllers;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use App\Models\Memo;
 
 class MemoControllerTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     /** @test */
     public function memo一覧が取得できる()
