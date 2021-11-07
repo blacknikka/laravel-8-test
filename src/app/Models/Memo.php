@@ -44,7 +44,7 @@ class Memo extends Model
         'author_id',
         'title',
         'body',
-        'stasus',
+        'status',
     ];
 
     /**
