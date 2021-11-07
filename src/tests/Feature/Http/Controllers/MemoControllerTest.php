@@ -76,7 +76,7 @@ class MemoControllerTest extends TestCase
         $count = 3;
         $memos = Memo::factory(Memo::class)->count($count)->create();
 
-        # update
+        // update
         $response = $this->patchJson(
             route('memo.update', [
             'id' => $memos[$count - 1]->id,
@@ -89,7 +89,7 @@ class MemoControllerTest extends TestCase
             1, $response['status'],
         );
 
-        # get
+        // get
         $response = $this->getJson(route('memo.get', [
             'id' => $memos[$count - 1]->id,
         ]));
@@ -106,7 +106,7 @@ class MemoControllerTest extends TestCase
         $count = 3;
         $memos = Memo::factory(Memo::class)->count($count)->create();
 
-        # delete
+        // delete
         $response = $this->deleteJson(
             route('memo.update', [
                 'id' => $memos[0]->id,
@@ -114,8 +114,10 @@ class MemoControllerTest extends TestCase
         $response
             ->assertStatus(200);
 
+        // confirm delete
+        $this->assertDeleted($memos[0]);
 
-        # get
+        // get
         $response = $this->getJson(route('memo.all'));
         $response
             ->assertStatus(200)
