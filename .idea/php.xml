@@ -114,6 +114,17 @@
       <path value="$PROJECT_DIR$/src/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/src/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/src/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/src/vendor/react/promise" />
+      <path value="$PROJECT_DIR$/src/vendor/justinrainbow/json-schema" />
+      <path value="$PROJECT_DIR$/src/vendor/barryvdh/laravel-ide-helper" />
+      <path value="$PROJECT_DIR$/src/vendor/barryvdh/reflection-docblock" />
+      <path value="$PROJECT_DIR$/src/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/src/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/src/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/src/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/src/vendor/seld/jsonlint" />
+      <path value="$PROJECT_DIR$/src/vendor/seld/phar-utils" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
