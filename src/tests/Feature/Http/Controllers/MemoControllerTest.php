@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use App\Models\Memo;
+use \Symfony\Component\HttpFoundation\Response;
 
 class MemoControllerTest extends TestCase
 {
@@ -145,4 +146,18 @@ class MemoControllerTest extends TestCase
         $this->assertDeleted($memos[0]);
     }
 
+    /** @test */
+    public function 別ユーザのmemoは削除できない()
+    {
+        $count = 3;
+        ['user' => $user1, 'memos' => $memos] = $this->createMemosAndUser($count);
+        $user2 = User::factory()->create();
+
+        // delete as another user (the user who doesn't have its memo)
+        $response = $this
+            ->actingAs($user2)
+            ->deleteJson("/api/memos/{$memos[0]->id}");
+        $response
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
 }
