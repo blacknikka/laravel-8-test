@@ -37,11 +37,15 @@ class MemoController extends Controller
      * @return Memo
      */
     public function store(MemoRequest $request): Memo {
-        return Memo::create([
+        return Memo::create(array_merge([
             "title" => $request->input("title"),
             "body" => $request->input("body"),
             "status" => $request->input("status"),
-        ]);
+        ], $request->has("is_public") ?
+            [
+                "is_public" => $request->input("is_public"),
+            ]: [],
+        ));
     }
 
     /**
@@ -52,11 +56,15 @@ class MemoController extends Controller
     public function update(MemoRequest $request, Memo $memo): array {
         $this->authorize('update', $memo);
 
-        $status = $memo->update([
+        $status = $memo->update(array_merge([
             "title" => $request->input("title"),
             "body" => $request->input("body"),
             "status" => $request->input("status"),
-        ]);
+        ], $request->has("is_public") ?
+            [
+                "is_public" => $request->input("is_public"),
+            ]: [],
+        ));
 
         return [
             'status' => $status,

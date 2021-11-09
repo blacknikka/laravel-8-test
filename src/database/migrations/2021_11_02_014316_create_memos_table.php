@@ -18,6 +18,7 @@ class CreateMemosTable extends Migration
             $table->string('title', 255);
             $table->text('body');
             $table->string('status');
+            $table->boolean('is_public')->default(false);
 
             // user ID
             $table->integer('author_id')->unsigned()->default(0);
