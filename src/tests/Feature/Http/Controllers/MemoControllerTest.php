@@ -39,7 +39,7 @@ class MemoControllerTest extends TestCase
     /** @test */
     public function memo一覧が取得できる()
     {
-        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3);
+        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3, ['is_public' => false]);
         $response = $this->actingAs($user)->getJson('/api/memos');
         $response
             ->assertStatus(200)
@@ -91,6 +91,29 @@ class MemoControllerTest extends TestCase
         $response = $this->getJson("/api/memos/{$memos[0]->id}");
         $response
             ->assertStatus(401);
+    }
+
+    /** @test */
+    public function privateなmemoのid指定_他人のmemoは見れない()
+    {
+        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3, ['is_public' => false]);
+        $user2 = User::factory()->create();
+        $response = $this->actingAs($user2)->getJson("/api/memos/{$memos[0]->id}");
+        $response
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function publicなmemoのid指定_他人のmemoは見ることができる()
+    {
+        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3, ['is_public' => true]);
+        $user2 = User::factory()->create();
+        $response = $this->actingAs($user2)->getJson("/api/memos/{$memos[0]->id}");
+        $response
+            ->assertStatus(200)
+            ->assertJson(
+                $memos[0]->jsonSerialize()
+            );
     }
 
     /** @test */

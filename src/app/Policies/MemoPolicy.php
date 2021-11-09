@@ -19,7 +19,7 @@ class MemoPolicy
      */
     public function view(User $user, Memo $memo)
     {
-        return $user->id === $memo->author_id;
+        return ($user->id === $memo->author_id) || $memo->is_public;
     }
 
     /**
