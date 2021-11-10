@@ -45,6 +45,7 @@ class Memo extends Model
         'title',
         'body',
         'status',
+        'is_public',
     ];
 
     /**
@@ -54,6 +55,4 @@ class Memo extends Model
     {
         return $this->belongsTo(User::class, 'author_id');
     }
-
-
 }

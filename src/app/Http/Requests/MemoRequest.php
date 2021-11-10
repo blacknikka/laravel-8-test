@@ -32,6 +32,9 @@ class MemoRequest extends FormRequest
                 'required',
                 Rule::in([Memo::DOING, Memo::DONE, Memo::PENDING]),
             ],
+            "is_public" => [
+                'boolean',
+            ]
         ];
     }
 }

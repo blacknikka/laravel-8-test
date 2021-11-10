@@ -22,6 +22,7 @@ class MemoFactory extends Factory
                 Memo::DONE,
                 Memo::PENDING,
             ]),
+            'is_public' => $this->faker->boolean(),
         ];
     }
 }
