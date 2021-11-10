@@ -24,7 +24,7 @@ class MemoControllerTest extends TestCase
      */
     private function createMemosAndUser(int $count, array $param = []): array {
         $user = User::factory()->create();
-        $memos = Memo::factory(Memo::class)
+        $memos = Memo::factory()
             ->for($user, 'author')
             ->count($count)->create(
                 $param,
