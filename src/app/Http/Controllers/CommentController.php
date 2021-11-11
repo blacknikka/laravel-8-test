@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -23,26 +24,28 @@ class CommentController extends Controller
 
     /**
      * Create Comment
-     * @param CommentRequest $request
+     * @param CommentUpdateRequest $request
      * @return Comment
      */
-    public function store(CommentRequest $request): Comment {
+    public function store(CommentUpdateRequest $request): Comment {
         return Comment::create([
             "nickname" => $request->input("nickname"),
             "body" => $request->input("body"),
+            "memo_id" => $request->input("memo_id"),
+            "author_id" => Auth::id(),
         ]);
     }
 
     /**
-     * @param CommentRequest $request
+     * @param CommentUpdateRequest $request
      * @param $id
      * @return array{status: bool}
      */
-    public function update(CommentRequest $request, Comment $comment): array {
+    public function update(CommentUpdateRequest $request, Comment $comment): array {
         $this->authorize('update', $comment);
 
         $status = $comment->update([
-            "nickname" => $request->input("title"),
+            "nickname" => $request->input("nickname"),
             "body" => $request->input("body"),
         ]);
 

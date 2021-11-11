@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // memo
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('memos', App\Http\Controllers\MemoController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::apiResource('comments', App\Http\Controllers\CommentController::class)->only(['show', 'update', 'destroy']);
+    Route::apiResource('memos', App\Http\Controllers\MemoController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+    Route::apiResource('comments', App\Http\Controllers\CommentController::class)->only(['show', 'store', 'update', 'destroy']);
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

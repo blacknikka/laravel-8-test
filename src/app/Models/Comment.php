@@ -16,6 +16,8 @@ class Comment extends Model
     protected $fillable = [
         'nickname',
         'body',
+        'memo_id',
+        'author_id',
     ];
 
     /**

@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Http\Requests;
 
-use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentUpdateRequest;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Validator;
 
-class CommentRequestTest extends TestCase
+class CommentUpdateRequestTest extends TestCase
 {
     /**
      * 正常系
@@ -17,7 +17,7 @@ class CommentRequestTest extends TestCase
     public function ルールの確認($nickname, $body, $expected)
     {
         // test target
-        $sut = new CommentRequest();
+        $sut = new CommentUpdateRequest();
 
         $rules = $sut->rules();
         $validator = Validator::make([

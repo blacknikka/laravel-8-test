@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\MemoRequest;
 use App\Models\Memo;
+use Illuminate\Support\Facades\Auth;
 
 class MemoController extends Controller
 {
@@ -41,6 +42,7 @@ class MemoController extends Controller
             "title" => $request->input("title"),
             "body" => $request->input("body"),
             "status" => $request->input("status"),
+            "author_id" => Auth::id(),
         ], $request->has("is_public") ?
             [
                 "is_public" => $request->input("is_public"),

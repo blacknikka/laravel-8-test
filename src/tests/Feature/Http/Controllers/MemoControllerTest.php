@@ -117,6 +117,32 @@ class MemoControllerTest extends TestCase
     }
 
     /** @test */
+    public function memoをstoreできる()
+    {
+        $expected = [
+            'title' => 'tttt',
+            'body' => 'bbbb',
+            'status' => Memo::PENDING,
+        ];
+
+        ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3, ['is_public' => true]);
+        $response = $this->actingAs($user)->postJson(
+            "/api/memos/",
+            $expected,
+        );
+        $response
+            ->assertStatus(201)
+            ->assertJson(
+                $expected,
+            );
+
+        $this->assertDatabaseHas(
+            app(Memo::class)->getTable(),
+            $expected,
+        );
+    }
+
+    /** @test */
     public function memoがid指定で更新できる()
     {
         $post_data = [
