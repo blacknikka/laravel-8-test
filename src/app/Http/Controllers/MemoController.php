@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MemoShowResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\MemoRequest;
 use App\Models\Memo;
@@ -24,12 +25,12 @@ class MemoController extends Controller
      *
      * @param Request $request
      * @param number $id
-     * @return Memo
+     * @return MemoShowResource
      */
-    public function show(Memo $memo): Memo {
+    public function show(Memo $memo): MemoShowResource {
         $this->authorize('view', $memo);
 
-        return $memo;
+        return new MemoShowResource($memo);
     }
 
     /**

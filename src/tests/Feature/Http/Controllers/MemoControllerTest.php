@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use App\Models\Memo;
 use \Symfony\Component\HttpFoundation\Response;
@@ -66,10 +67,17 @@ class MemoControllerTest extends TestCase
         ['user' => $user, 'memos' => $memos] = $this->createMemosAndUser(3);
         $response = $this->actingAs($user)->getJson("/api/memos/{$memos[0]->id}");
         $response
-            ->assertStatus(200)
-            ->assertJson(
-                $memos[0]->jsonSerialize()
-            );
+            ->assertStatus(200);
+        $response
+            ->assertJson(function (AssertableJson $json) use ($memos) {
+                $json->has('data')
+                    ->where('data.id', $memos[0]->id)
+                    ->where('data.title', $memos[0]->title)
+                    ->where('data.body', $memos[0]->body)
+                    ->where('data.status', $memos[0]->status)
+                    ->where('data.is_public', $memos[0]->is_public)
+                    ->where('data.author_id', $memos[0]->author_id);
+            });
     }
 
     /** @test */
@@ -111,9 +119,15 @@ class MemoControllerTest extends TestCase
         $response = $this->actingAs($user2)->getJson("/api/memos/{$memos[0]->id}");
         $response
             ->assertStatus(200)
-            ->assertJson(
-                $memos[0]->jsonSerialize()
-            );
+            ->assertJson(function (AssertableJson $json) use ($memos) {
+                $json->has('data')
+                    ->where('data.id', $memos[0]->id)
+                    ->where('data.title', $memos[0]->title)
+                    ->where('data.body', $memos[0]->body)
+                    ->where('data.status', $memos[0]->status)
+                    ->where('data.is_public', $memos[0]->is_public)
+                    ->where('data.author_id', $memos[0]->author_id);
+            });
     }
 
     /** @test */
@@ -173,9 +187,13 @@ class MemoControllerTest extends TestCase
             ->getJson("/api/memos/{$memos[$count - 1]->id}");
         $response
             ->assertStatus(200)
-            ->assertJson(
-                $post_data,
-            );
+            ->assertJson(function (AssertableJson $json) use ($post_data, $count) {
+                $json->has('data')
+                    ->where('data.title', $post_data['title'])
+                    ->where('data.body', $post_data['body'])
+                    ->where('data.status', $post_data['status'])
+                    ->etc();
+            });
     }
 
     /** @test */
