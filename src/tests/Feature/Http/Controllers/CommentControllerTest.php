@@ -19,30 +19,30 @@ class CommentControllerTest extends TestCase
      * @return array{user1: User, user2: User, memo: Collection<Memo>, comments: Collection<Comment>}
      */
     private function createCommentsWithRelationship(bool $is_public, array $param = []): array {
-        $user = User::factory()->create();
+        $memo_owner = User::factory()->create();
         $memo = Memo::factory()
-            ->for($user, 'author')
+            ->for($memo_owner, 'author')
             ->create([
             'is_public' => $is_public,
         ]);
         $comments = Comment::factory()
-            ->for($user, 'author')
+            ->for($memo_owner, 'author')
             ->for($memo, 'memo')
             ->count(2)->create(
                 $param,
             );
 
-        $user2 = User::factory()->create();
+        $other = User::factory()->create();
         $comments2 = Comment::factory()
-            ->for($user2, 'author')
+            ->for($other, 'author')
             ->for($memo, 'memo')
             ->count(2)->create(
                 $param,
             );
 
         return [
-            'user1' => $user,
-            'user2' => $user2,
+            'memo_owner' => $memo_owner,
+            'other' => $other,
             'memo' => $memo,
             'comments' => $comments->concat($comments2),
         ];
@@ -51,13 +51,67 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function publicなmemoに紐づいたcommentが取得できる()
     {
-        ['user1' => $user1, 'user2' => $user2, 'memo' => $memo, 'comments' => $comments]
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
             = $this->createCommentsWithRelationship(true);
-        $response = $this->actingAs($user1)->getJson("/api/comments/{$comments[0]->id}");
+        $response = $this->actingAs($memo_owner)->getJson("/api/comments/{$comments[0]->id}");
         $response
             ->assertStatus(200)
             ->assertJson(
                 $comments[0]->jsonSerialize()
             );
     }
+
+    /** @test */
+    public function privateなmemoに紐づいたcommentが取得できる_データのオーナー()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(false);
+        $response = $this->actingAs($memo_owner)->getJson("/api/comments/{$comments[0]->id}");
+        $response
+            ->assertStatus(200)
+            ->assertJson(
+                $comments[0]->jsonSerialize()
+            );
+    }
+
+    /** @test */
+    public function privateなmemoに紐づいたcommentが取得できない_データのオーナー以外()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(false);
+        $response = $this->actingAs($other)->getJson("/api/comments/{$comments[0]->id}");
+        $response
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function publicなmemoにcommentをstoreできる()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(true);
+
+        $expected = [
+            'nickname' => 'name',
+            'body' => 'bbb',
+            'memo_id' => $memo->id,
+        ];
+
+        // test
+        $response = $this->actingAs($memo_owner)->postJson(
+            "/api/comments",
+            $expected,
+        );
+
+        $response
+            ->assertStatus(201)
+            ->assertJson(
+                $expected,
+            );
+
+        $this->assertDatabaseHas(
+            app(Comment::class)->getTable(),
+            $expected,
+        );
+    }
+
 }
