@@ -114,4 +114,95 @@ class CommentControllerTest extends TestCase
         );
     }
 
+    /** @test */
+    public function 自分のcommentをupdateできる()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(true);
+
+        $expected = [
+            'nickname' => 'name',
+            'body' => 'bbb',
+            'memo_id' => $memo->id,
+        ];
+
+        // test
+        $response = $this->actingAs($memo_owner)->patchJson(
+            "/api/comments/{$comments[0]->id}",
+            $expected,
+        );
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(
+                [
+                    'status' => true,
+                ],
+            );
+
+        $this->assertDatabaseHas(
+            app(Comment::class)->getTable(),
+            $expected,
+        );
+    }
+
+    /** @test */
+    public function 他人のcommentをupdateできない()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(true);
+
+        $expected = [
+            'nickname' => 'name',
+            'body' => 'bbb',
+            'memo_id' => $memo->id,
+        ];
+
+        // test
+        $response = $this->actingAs($other)->patchJson(
+            "/api/comments/{$comments[0]->id}",
+            $expected,
+        );
+
+        $response
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function 自分のcommentをdeleteできる()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(true);
+
+        // test
+        $response = $this->actingAs($memo_owner)->deleteJson(
+            "/api/comments/{$comments[0]->id}",
+        );
+
+        $response
+            ->assertStatus(200);
+
+        $this->assertDeleted(
+            $comments[0],
+        );
+    }
+
+    /** @test */
+    public function 他人のcommentをdeleteできない()
+    {
+        ['memo_owner' => $memo_owner, 'other' => $other, 'memo' => $memo, 'comments' => $comments]
+            = $this->createCommentsWithRelationship(true);
+
+        // test
+        $response = $this->actingAs($other)->deleteJson(
+            "/api/comments/{$comments[0]->id}",
+        );
+
+        $response
+            ->assertStatus(403);
+
+        $this->assertModelExists(
+            $comments[0],
+        );
+    }
 }

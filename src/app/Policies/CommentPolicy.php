@@ -45,7 +45,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->id === $comment->memo()->author()->id;
+        return $user->id === $comment->memo->author->id;
     }
 
     /**
@@ -57,30 +57,6 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Comment $comment)
-    {
-        //
+        return $user->id === $comment->memo->author->id;
     }
 }

@@ -45,7 +45,7 @@ class CommentController extends Controller
         $this->authorize('update', $comment);
 
         $status = $comment->update([
-            "nickname" => $request->input("title"),
+            "nickname" => $request->input("nickname"),
             "body" => $request->input("body"),
         ]);
 
