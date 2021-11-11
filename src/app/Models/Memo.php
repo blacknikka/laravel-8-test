@@ -26,6 +26,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Memo whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Memo whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $is_public
+ * @property int $author_id
+ * @property-read \App\Models\User $author
+ * @method static \Illuminate\Database\Eloquent\Builder|Memo whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Memo whereIsPublic($value)
  */
 class Memo extends Model
 {
