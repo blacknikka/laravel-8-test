@@ -14,10 +14,12 @@ class MemoController extends Controller
      * Get all memo items
      *
      * @param Request $request
-     * @return Memo[]
+     * @return MemoShowResource[]
      */
     public function index(Request $request): iterable {
-        return Memo::all();
+        return collect(Memo::all())->map(function (Memo $memo) {
+            return new MemoShowResource($memo);
+        });
     }
 
     /**
