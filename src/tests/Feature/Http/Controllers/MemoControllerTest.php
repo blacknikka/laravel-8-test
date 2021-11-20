@@ -45,13 +45,23 @@ class MemoControllerTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonCount(3)
-            ->assertJson($memos->jsonSerialize());
+            ->assertJson($memos->map(function(Memo $memo) {
+                return [
+                    'title' => $memo->title,
+                    'body' => $memo->body,
+                    'status' => $memo->status,
+                    'is_public' => $memo->is_public,
+                    'author_id' => $memo->author->id,
+                ];
+            })->toArray());
 
         $memos->each(function ($memo) {
             $expected = [
                 'title' => $memo->title,
                 'body' => $memo->body,
                 'status' => $memo->status,
+                'is_public' => $memo->is_public,
+                'author_id' => $memo->author->id,
             ];
 
             $this->assertDatabaseHas(
