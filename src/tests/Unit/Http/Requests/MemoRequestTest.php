@@ -28,7 +28,27 @@ class MemoRequestTest extends TestCase
         ], $rules);
 
         $this->assertEquals($validator->passes(), $expected);
-        $this->assertTrue(true);
+    }
+
+    /**
+     * 余計なデータが有る場合
+     *
+     * @test
+     */
+    public function 余計なデータが存在する場合()
+    {
+        // test target
+        $sut = new MemoRequest();
+
+        $rules = $sut->rules();
+        $validator = Validator::make([
+            "id" => 5,
+            "title" => "title",
+            "body" => "body",
+            "status" => "pending",
+        ], $rules);
+
+        $this->assertTrue($validator->passes());
     }
 
     public function memoDataProvider(): array {
