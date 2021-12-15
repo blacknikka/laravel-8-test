@@ -14,16 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// memo
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('memos', App\Http\Controllers\MemoController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
-    Route::apiResource('comments', App\Http\Controllers\CommentController::class)->only(['show', 'store', 'update', 'destroy']);
-});
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', App\Http\Controllers\MeController::class)->name('user.me');
+
+    Route::apiResource('memos', App\Http\Controllers\MemoController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+    Route::apiResource('comments', App\Http\Controllers\CommentController::class)->only(['show', 'store', 'update', 'destroy']);
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
