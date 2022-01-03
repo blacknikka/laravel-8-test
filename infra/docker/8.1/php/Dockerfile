@@ -26,6 +26,7 @@ RUN apt-get update && \
 
 COPY ./infra/docker/8.1/php/php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 COPY ./infra/docker/8.1/php/php.ini /usr/local/etc/php/php.ini
+COPY ./infra/docker/8.1/php/start-container /work/start-container/
 COPY ./src/ /work/backend/
 
 WORKDIR /work/backend
@@ -38,4 +39,5 @@ RUN mkdir -p storage/framework/cache/data && \
     mkdir -p bootstrap/cache && \
     chmod -R 777 storage && \
     chown -R www-data:www-data /work/backend && \
+    chmod +x /work/start-container/start-container && \
     composer install
