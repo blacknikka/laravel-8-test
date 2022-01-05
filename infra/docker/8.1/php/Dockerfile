@@ -41,3 +41,8 @@ RUN mkdir -p storage/framework/cache/data && \
     chown -R www-data:www-data /work/backend && \
     chmod +x /work/start-container/start-container && \
     composer install
+
+# install xdebug
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+EXPOSE 9000

@@ -17,6 +17,8 @@ services:
         command: /work/start-container/start-container
         volumes:
             - './:/work/backend/'
+        ports:
+            - '9000:9000'
         networks:
             - sail
         depends_on:

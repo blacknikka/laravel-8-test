@@ -4,13 +4,7 @@
     <list>
       <list>
         <remote-mappings server-id="php@f75f2a9a-d94e-4d56-98b5-f8335d39fbbe" />
-        <remote-mappings server-id="php@331d5ba5-bd7f-4d28-9f17-dc1f6bd47a05">
-          <settings>
-            <list>
-              <mapping local-root="$PROJECT_DIR$/src" remote-root="/work/backend" />
-            </list>
-          </settings>
-        </remote-mappings>
+        <remote-mappings server-id="php@331d5ba5-bd7f-4d28-9f17-dc1f6bd47a05" />
       </list>
     </list>
   </component>
