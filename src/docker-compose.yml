@@ -1,29 +1,39 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    app:
         build:
-            context: ./docker/8.0
-            dockerfile: Dockerfile
+            context: ../infra/docker/8.1/php
+            dockerfile: ../infra/docker/8.1/php/Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
+        image: app
         environment:
             WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        command: /work/start-container/start-container
         volumes:
-            - '.:/var/www/html'
+            - './:/work/backend/'
+        ports:
+            - '9000:9000'
         networks:
             - sail
         depends_on:
             - mysql
             - redis
+            - web
+    web:
+        build:
+            context: ../infra/docker/8.1/nginx
+            dockerfile: ../infra/docker/8.1/nginx/Dockerfile
+        image: web
+        ports:
+            - '${APP_PORT:-80}:80'
+        networks:
+            - sail
     mysql:
         image: 'mysql:8.0'
         ports:
